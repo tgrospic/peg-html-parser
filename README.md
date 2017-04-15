@@ -1,5 +1,7 @@
 # PEG HTML parser
 
+[![build status][travis-image]][travis-url]
+
 This is definitely not the fastest HTML/XML parser that runs on JavaScript but is very small and simple, just so it can be easily modified.
 
 The purpose of this project is to be a quick start for playing with [PEG.js][peg-js] and especially for those who love [LiveScript][livescript].
@@ -56,4 +58,6 @@ npm test
 [livescript]: https://github.com/gkz/LiveScript
 [pegjs-sublime]: https://packagecontrol.io/packages/PEGjs%20LiveScript
 [w3c-html5]: https://www.w3.org/TR/html5/syntax.html
+[travis-image]: https://api.travis-ci.org/tgrospic/peg-html-parser.svg
+[travis-url]: https://travis-ci.org/tgrospic/peg-html-parser
 [license]: https://github.com/tgrospic/peg-html-parser/blob/master/LICENSE
