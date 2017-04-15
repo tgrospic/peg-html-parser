@@ -40,7 +40,7 @@ test 'should parse nested elements', (t) ->
   t.deepEqual result, expected
 
 test 'should parse all fixtures', (t) ->
-  readFiles '../fixtures', ["**/*.html"]
+  readFiles "#__dirname/fixtures", ["**/*.html"]
     .forEach do
       (file) ->
         # parse file
