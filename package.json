@@ -1,0 +1,37 @@
+{
+  "name": "peg-html-parser",
+  "version": "0.1.0",
+  "description": "PEG HTML/XML parser",
+  "author": "Tomislav Grospic <grospic@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "html",
+    "xml",
+    "parser",
+    "peg",
+    "pegjs"
+  ],
+  "devDependencies": {
+    "chalk": "^1.1.3",
+    "chokidar": "^1.4.1",
+    "del": "^2.0.1",
+    "js-yaml": "^3.4.6",
+    "livescript": "^1.4.0",
+    "mkdirp": "^0.5.1",
+    "pegjs": "^0.9.0",
+    "pegjs-livescript-plugin": "^0.2.0",
+    "rx": "^4.1.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.6.3"
+  },
+  "dependencies": {},
+  "main": "dist/peg-html-parser.js",
+  "scripts": {
+    "build": "lsc control build",
+    "watch": "lsc control watch",
+    "clean": "lsc control clean",
+    "cleanAll": "lsc control cleanAll",
+    "test": "lsc test | tap-spec",
+    "control": "lsc control"
+  }
+}

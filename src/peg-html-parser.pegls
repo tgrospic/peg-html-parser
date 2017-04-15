@@ -1,0 +1,88 @@
+{
+  function node name, attributes, content
+    {node: name}
+      ..attrs   = that    if attributes
+      ..content = content if content and content.length
+
+  function reduceToObj xs
+    with attr = {}
+      setField = (x) -> attr[x.name] = x.text if x and x.name
+      [setField .. for xs]
+}
+
+/**
+ * Document is just a collection of elements.
+ */
+Document = __ nodes:Element* { nodes }
+
+/**
+ * Elements - https://www.w3.org/TR/html5/syntax.html#elements-0
+ */
+Element  = RawText / Nested / Void / Comment / DocType / Text
+
+RawText  = Script / Style / Textarea / Title / PlainText
+
+Script    "script"    = '<script'i    attrs:Attributes '>' __ content:(ch:(!('</script'i    __ '>') c:. { c })* { ch.join '' }) __ '</script'i    __ '>' __ { node 'script', attrs, content }
+Style     "style"     = '<style'i     attrs:Attributes '>' __ content:(ch:(!('</style'i     __ '>') c:. { c })* { ch.join '' }) __ '</style'i     __ '>' __ { node 'style', attrs, content }
+Textarea  "textarea"  = '<textarea'i  attrs:Attributes '>' __ content:(ch:(!('</textarea'i  __ '>') c:. { c })* { ch.join '' }) __ '</textarea'i  __ '>' __ { node 'textarea', attrs, content }
+Title     "title"     = '<title'i     attrs:Attributes '>' __ content:(ch:(!('</title'i     __ '>') c:. { c })* { ch.join '' }) __ '</title'i     __ '>' __ { node 'title', attrs, content }
+PlainText "plaintext" = '<plaintext'i attrs:Attributes '>' __ content:(ch:(!('</plaintext'i __ '>') c:. { c })* { ch.join '' }) __ '</plaintext'i __ '>' __ { node 'plaintext', attrs, content }
+
+Nested    "element"   = begin:TagBegin __ content:Element* __ end:TagEnd __ &{ begin.node == end } {
+    node begin.node, begin.attrs, content
+  }
+
+TagBegin  "begin tag" = '<'  name:Symbol attrs:Attributes '>' { node name.toLowerCase!, attrs }
+TagEnd    "end tag"   = '</' name:Symbol __               '>' { name.toLowerCase! }
+
+/**
+ * Void element (with self closing tag, w/o content)
+ * - 'area'i / 'base'i / 'br'i / 'col'i / 'embed'i / 'hr'i / 'img'i / 'input'i / 'keygen'i / 'link'i / 'meta'i / 'param'i / 'source'i / 'track'i / 'wbr'i
+ */
+Void      "element"   = '<' name:Symbol attrs:Attributes ('/>' / '>') __ { node name, attrs }
+
+Comment   "comment"   = '<!--' text:CommentText '-->' __ {
+    node 'comment', void, text
+  }
+
+CommentText = ch:(!'-->' c:. { c })* { ch.join '' }
+
+DocType   "doctype"   = '<!DOCTYPE'i __ root:Symbol __ type:('public'i / 'system'i)? __ text:String* '>' __ {
+    node 'doctype'
+      ..root    = that.toLowerCase! if root
+      ..type    = that.toLowerCase! if type
+      ..content = text if text and text.length
+  }
+
+Text "text"
+  = ch:(c:[^<] { c })+ {
+    node 'text', void, ch.join ''
+  }
+  / ch:(!TagEnd !Void !Comment !DocType c:. { c })+ {
+    node 'text', void, ch.join ''
+  }
+
+/**
+ * Element attributes
+ */
+Attributes = __ attrs:Attribute* __ { reduceToObj attrs if attrs and attrs.length }
+
+Attribute "attribute"
+  = name:Symbol __ text:(__ '=' __ s:String { s })? __ { {name, text} }
+  / !'/>' [^> ]+ __ { void }
+
+/**
+ * String - single, double, w/o quotes
+ */
+String "string"
+  = '"'  ch:[^"]*      '"'  __ { ch.join '' }
+  / '\'' ch:[^']*      '\'' __ { ch.join '' }
+  /      ch:[^"'<>` ]+      __ { ch.join '' }
+
+/**
+ * Tag name, attribute name
+ */
+Symbol = h:[a-zA-Z0-9_\-] t:[a-zA-Z0-9:_\-]* { h ++ t.join '' }
+
+__ "space characters"
+  = [\r\n \t\u000C]*
