@@ -15,11 +15,11 @@ function parseFile contentFilePath, plugins
   parseString content, plugins
 
 function parseString content, plugins=[]
-  parser = wrapPegError -> PEG.buildParser grammar, cache: true, plugins: defPlugins ++ plugins
+  parser = wrapPegError -> PEG.generate grammar, cache: true, plugins: defPlugins ++ plugins
   parser.parse content
 
 !function writeParser savePath, plugins=[]
-  genParserSource = wrapPegError -> PEG.buildParser grammar, cache: true, plugins: defPlugins ++ plugins, output: 'source'
+  genParserSource = wrapPegError -> PEG.generate grammar, cache: true, plugins: defPlugins ++ plugins, output: 'source'
   absPath = path.resolve savePath
   mkdirp.sync <| path.dirname absPath
   fs.writeFileSync absPath, "module.exports = #genParserSource;", 'utf-8'
@@ -27,7 +27,7 @@ function parseString content, plugins=[]
 function parseFileWith grammarFilePath, contentFilePath, plugins
   content = fs.readFileSync contentFilePath, 'utf-8'
   grammar = fs.readFileSync grammarFilePath, 'utf-8'
-  parser = wrapPegError -> PEG.buildParser grammar, cache: true, plugins: defPlugins ++ plugins
+  parser = wrapPegError -> PEG.generate grammar, cache: true, plugins: defPlugins ++ plugins
   parser.parse content
 
 function wrapPegError f

@@ -1,7 +1,9 @@
 require! {
   child_process: {spawn}
-  chalk: {blue, white, red, green}, chokidar, del
+  chokidar
+  del: {deleteAsync}
   './lib/parser': {writeParser}
+  chalk: {blue, white, red, green}
 }
 
 export build, watch, clean, clean-all
@@ -28,10 +30,10 @@ function clean
   clean-watch! .then clean-dist
 
 function clean-watch
-  del ['.watch']
+  deleteAsync ['.watch']
 
 function clean-dist
-  del ['dist']
+  deleteAsync ['dist']
 
 function clean-all
-  clean! .then -> del ['node_modules']
+  clean! .then -> deleteAsync ['node_modules']
