@@ -1,5 +1,0 @@
-# https://travis-ci.org/tgrospic/peg-html-parser
-sudo: false
-language: node_js
-node_js:
-  - "node"
