@@ -11,7 +11,7 @@ require! {
 
 export readFiles
 
-if process.argv.2 then
+if process.argv.3 then
   runAll that
 
 function runAll pegSourcePath

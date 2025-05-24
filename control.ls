@@ -6,7 +6,7 @@ require! {
 
 export build, watch, clean, clean-all
 
-if process.argv.2 then
+if process.argv.3 then
   console.log green 'Starting task', white that
   module.exports[that]!
     .then -> console.log green 'Done task', white that

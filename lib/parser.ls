@@ -21,7 +21,7 @@ function parseString content, plugins=[]
 !function writeParser savePath, plugins=[]
   genParserSource = wrapPegError -> PEG.buildParser grammar, cache: true, plugins: defPlugins ++ plugins, output: 'source'
   absPath = path.resolve savePath
-  mkdirp <| path.dirname absPath
+  mkdirp.sync <| path.dirname absPath
   fs.writeFileSync absPath, "module.exports = #genParserSource;", 'utf-8'
 
 function parseFileWith grammarFilePath, contentFilePath, plugins
