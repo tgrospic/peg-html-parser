@@ -5,7 +5,7 @@ require! {
 
 module.exports = (logPath) ->
   peg-pass = (ast) !->
-    mkdirp <| path.dirname logPath
+    mkdirp.sync <| path.dirname logPath
     fs.writeFileSync logPath, YAML.dump ast, 'utf-8'
 
   use: (config, options) -> config.passes.transform.push peg-pass

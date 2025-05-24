@@ -30,7 +30,7 @@ function runAll pegSourcePath
           fileName = path.basename file.path
           output = parseFileWith pegSourcePath, file.path, [peg-print-ast-plugin "#tmpDir/#fileName.ast.yaml"]
           outputFile  = "#tmpDir/#fileName.yaml"
-          mkdirp <| path.dirname outputFile
+          mkdirp.sync <| path.dirname outputFile
           fs.writeFileSync outputFile, stringify output, 'utf-8'
           console.log cyan " ✔ #{yellow file.path}"
         catch ex

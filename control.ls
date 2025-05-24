@@ -21,7 +21,7 @@ function watch
   suffix = if /^win/.test(process.platform) then '.cmd' else ''
   clean-watch! .then ->
     var p
-    chokidar.watch ['src/**/*.pegls'] .on 'change', (file) ->
+    chokidar.watch ['src/.'] .on 'change', (file) ->
       p?.kill!
       p := spawn "lsc#suffix", ['lib/runner.ls', file], cwd: process.cwd!, stdio: ['inherit', 'inherit', 'pipe']
       p.stderr.on 'data', red >> console.log
