@@ -23,7 +23,7 @@
   "dependencies": {},
   "devDependencies": {
     "chalk": "4",
-    "chokidar": "4",
+    "chokidar": "5",
     "del": "8",
     "js-yaml": "4",
     "livescript": "1",
